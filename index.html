@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nguyen Huy - Proxy & AIM iOS/Android</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Serif+JP:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+*{margin:0;padding:0;box-sizing:border-box}html{scroll-behavior:smooth}body{font-family:Inter,Arial,sans-serif;background:#f6f7fb;color:#171717;line-height:1.55;overflow-x:hidden}
+.bg-samurai,.bg-fog,.meteor-container,.samurai-symbol{display:none}
+.header{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.96);backdrop-filter:blur(14px);border-bottom:1px solid #eee}
+.header-inner{max-width:1180px;margin:auto;padding:15px 20px;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.logo{font-size:22px;font-weight:900;letter-spacing:-.5px;color:#ff1768}
+.logo span{display:block;font-size:11px;font-weight:700;letter-spacing:1px;color:#777;margin-top:2px}
+.header-right{display:flex;align-items:center;gap:14px}
+.header-contact{font-size:14px;font-weight:700;color:#555}
+.header-contact a{color:#ff1768;text-decoration:none}
+.auth-btns{display:flex;gap:8px}
+.auth-btn{border:0;padding:8px 14px;border-radius:10px;font-size:13px;font-weight:800;cursor:pointer;transition:.2s}
+.btn-login{background:#fff0f5;color:#ff1768;border:1px solid #ffd0df}
+.btn-login:hover{background:#ff1768;color:#fff}
+.btn-register{background:#ff1768;color:#fff}
+.btn-register:hover{background:#e90055}
+.user-info{font-size:13px;font-weight:700;color:#ff1768}
+.hero{max-width:1180px;margin:0 auto;padding:55px 20px 35px;text-align:center}
+.hero h1{font-size:clamp(28px,5vw,48px);font-weight:900;color:#171717;letter-spacing:-1.5px}
+.hero p{max-width:700px;margin:10px auto 18px;color:#777;font-size:15px}
+.badge{display:inline-block;padding:9px 16px;border-radius:999px;background:#fff0f5;color:#ff1768;border:1px solid #ffd0df;font-size:13px;font-weight:800}
+.container{max-width:1180px;margin:auto;padding:0 20px 45px}
+.category{margin:28px 0 42px}
+.category-title{display:flex;align-items:center;gap:12px;background:#ff1768;color:#fff;padding:13px 16px;border-radius:14px;font-size:18px;font-weight:900;box-shadow:0 8px 24px rgba(255,23,104,.16);margin-bottom:18px}
+.category-title .icon{width:42px;height:42px;border-radius:10px;background:#fff;padding:3px;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.category-title .icon img{width:100%;height:100%;object-fit:cover;border-radius:8px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:16px}
+.card{background:#fff;border:1px solid #ededf1;border-radius:16px;padding:20px;box-shadow:0 6px 22px rgba(20,20,30,.06);display:flex;flex-direction:column;min-height:230px;transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease}
+.card:hover{transform:translateY(-3px);box-shadow:0 12px 30px rgba(20,20,30,.1);border-color:#ffc3d6}
+.card-name{font-size:16px;font-weight:900;color:#171717;margin-bottom:10px}
+.card-desc{font-size:13px;white-space:pre-line;color:#777;line-height:1.65;flex:1}
+.card-footer{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:18px;padding-top:15px;border-top:1px solid #f0f0f3}
+.card-price{font-size:20px;font-weight:900;color:#ff1768}
+.card-btn{display:inline-flex;align-items:center;justify-content:center;text-decoration:none;background:#ff1768;color:#fff;padding:10px 16px;border-radius:10px;font-size:13px;font-weight:900;box-shadow:0 6px 15px rgba(255,23,104,.2);transition:.2s}
+.card-btn:hover{background:#e90055;transform:translateY(-1px)}
+.notice-overlay,.auth-overlay{position:fixed;inset:0;z-index:9999;background:rgba(20,20,25,.58);backdrop-filter:blur(7px);display:flex;align-items:center;justify-content:center;padding:18px}
+.auth-overlay{display:none}
+.notice-box,.auth-box{width:min(420px,100%);background:#fff;border:1px solid #ffd0df;border-radius:22px;padding:30px;box-shadow:0 25px 70px rgba(0,0,0,.2);text-align:center}
+.notice-box h2,.auth-box h2{font-size:22px;color:#ff1768;margin-bottom:10px}
+.notice-box>p{color:#666;font-size:14px}
+.notice-box .highlight{font-weight:900;color:#ff1768;margin:8px 0 18px}
+.contact{background:#fff7fa;border:1px solid #ffe0ea;border-radius:14px;padding:14px;text-align:left;display:grid;gap:9px;font-size:13px;color:#555}
+.contact a{color:#ff1768;font-weight:800;text-decoration:none;word-break:break-all}
+.notice-btn,.auth-submit{border:0;width:100%;margin-top:18px;padding:13px;border-radius:12px;background:#ff1768;color:#fff;font-weight:900;cursor:pointer;font-size:14px}
+.auth-box input{width:100%;padding:12px 14px;margin:8px 0;border:1px solid #eee;border-radius:10px;font-size:14px;outline:none}
+.auth-box input:focus{border-color:#ff1768}
+.auth-switch{margin-top:14px;font-size:13px;color:#666}
+.auth-switch span{color:#ff1768;font-weight:800;cursor:pointer}
+.auth-error{color:#e11d48;font-size:13px;margin-top:8px;display:none}
+.footer{background:#fff;border-top:1px solid #eee;text-align:center;padding:38px 20px;color:#777}
+.footer h3{color:#ff1768;font-size:20px;margin-bottom:10px}
+.footer p{font-size:13px;margin:5px}
+.footer a{color:#ff1768;text-decoration:none;font-weight:800}
+.copy{margin-top:18px;font-size:12px;color:#aaa}
+@media(max-width:650px){.header-inner{padding:12px 14px;flex-wrap:wrap}.logo{font-size:19px}.header-contact{font-size:12px}.hero{padding:38px 16px 25px}.hero h1{font-size:29px}.container{padding:0 14px 35px}.category-title{font-size:16px}.grid{grid-template-columns:1fr}.card{min-height:210px}.notice-box,.auth-box{padding:24px 18px}}
+    </style>
+</head>
+<body>
+
+    <div class="bg-samurai"></div>
+    <div class="bg-fog"></div>
+    <div class="meteor-container" id="meteorContainer"></div>
+
+    <!-- THÔNG BÁO -->
+    <div class="notice-overlay" id="noticeOverlay">
+        <div class="notice-box">
+            <h2>⚔️ Chào Mừng Bạn Đến Với Shop Nguyen Huy! ⚔️</h2>
+            <p>Liên Hệ Ngay Với Admin Khi Bạn Gặp Phải Vấn Đề Gì Nhé</p>
+            <p class="highlight">Hỗ trợ 24/7 - Uy tín - Chất lượng</p>
+            <div class="contact">
+                <span>📞 Contact Me: <a href="http://zalo.me/84899241533" target="_blank">0899241533</a> (Zalo)</span>
+                <span>💬 Box Zalo: <a href="https://zalo.me/g/0u0qcy9oqwodok1o6nui" target="_blank">https://zalo.me/g/0u0qcy9oqwodok1o6nui</a></span>
+                <span>📘 Facebook: <a href="https://www.facebook.com/share/1dXDJyYvar/?mibextid=wwXIfr" target="_blank">Nguyen Huy</a></span>
+            </div>
+            <button class="notice-btn" onclick="closeNotice()">VÀO SHOP NGAY</button>
+        </div>
+    </div>
+
+    <!-- ĐĂNG NHẬP / ĐĂNG KÝ -->
+    <div class="auth-overlay" id="authOverlay">
+        <div class="auth-box" id="loginBox">
+            <h2>Đăng Nhập</h2>
+            <input type="text" id="loginUser" placeholder="Tài khoản">
+            <input type="password" id="loginPass" placeholder="Mật khẩu">
+            <div class="auth-error" id="loginError">Sai tài khoản hoặc mật khẩu!</div>
+            <button class="auth-submit" onclick="handleLogin()">Đăng Nhập</button>
+            <div class="auth-switch">Chưa có tài khoản? <span onclick="showRegister()">Đăng ký ngay</span></div>
+        </div>
+        <div class="auth-box" id="registerBox" style="display:none">
+            <h2>Đăng Ký</h2>
+            <input type="text" id="regUser" placeholder="Tài khoản">
+            <input type="password" id="regPass" placeholder="Mật khẩu">
+            <input type="password" id="regPass2" placeholder="Nhập lại mật khẩu">
+            <div class="auth-error" id="regError"></div>
+            <button class="auth-submit" onclick="handleRegister()">Đăng Ký</button>
+            <div class="auth-switch">Đã có tài khoản? <span onclick="showLogin()">Đăng nhập</span></div>
+        </div>
+    </div>
+
+    <!-- HEADER -->
+    <header class="header">
+        <div class="header-inner">
+            <div class="logo">
+                SHOP Nguyen Huy
+                <span>PROXY & AIM iOS / ANDROID</span>
+            </div>
+            <div class="header-right">
+                <div class="header-contact">
+                    📞 <a href="https://zalo.me/84993130042" target="_blank">0993130042</a>
+                    &nbsp;|&nbsp;
+                    📘 <a href="https://www.facebook.com/share/1dXDJyYvar/?mibextid=wwXIfr" target="_blank">Facebook</a>
+                </div>
+                <div class="auth-btns" id="authBtns">
+                    <button class="auth-btn btn-login" onclick="openAuth('login')">Đăng nhập</button>
+                    <button class="auth-btn btn-register" onclick="openAuth('register')">Đăng ký</button>
+                </div>
+                <div class="user-info" id="userInfo" style="display:none">
+                    Xin chào, <span id="currentUser"></span> 
+                    <button class="auth-btn btn-login" style="margin-left:8px" onclick="logout()">Thoát</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="samurai-symbol">侍</div>
+        <h1>PROXY & AIM CHẤT LƯỢNG CAO</h1>
+        <p>Đầy đủ các loại AIM - Hỗ trợ iOS & Android - Antiband all map - Bảo hành uy tín</p>
+        <div class="badge">🔥 Hoàn tiền gấp đôi nếu không tác dụng</div>
+    </section>
+
+    <div class="container">
+
+        <!-- ===== TROLL MOD (MỚI) ===== -->
+        <section class="category">
+            <h2 class="category-title">
+                <span class="icon">
+                    <!-- THAY LINK ẢNH LOGO TROLL MOD VÀO ĐÂY -->
+                    <img src="YOUR_TROLLMOD_LOGO_URL_HERE" alt="TROLL MOD">
+                </span>
+                TROLL MOD
+            </h2>
+            <div class="grid">
+
+                <div class="card">
+                    <div class="card-name">KEY 1 THÁNG TROLLMOD PHANTOM</div>
+                    <div class="card-desc">HỖ TRỢ CHO CẢ ANDROID VÀ IOS
+CÀI ĐẶT DỄ DÀNG, DỄ SỬ DỤNG
+AIMLOCK, AIMBOT CỰC VIP
+ĐỊNH VỊ ESP
+NHẢY DÙ NHANH 1 GIÂY
+GIAO HÀNG NHANH CHÓNG
+HỖ TRỢ CÀI ĐẶT
+11 Quốc gia</div>
+                    <div class="card-footer">
+                        <div class="card-price">350.000đ</div>
+                        <a href="https://zalo.me/84993130042" target="_blank" class="card-btn">MUA NGAY</a>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-name">KEY 1 TUẦN TROLLMOD PHANTOM</div>
+                    <div class="card-desc">HỖ TRỢ CHO CẢ ANDROID VÀ IOS
+CÀI ĐẶT DỄ DÀNG, DỄ SỬ DỤNG
+AIMLOCK, AIMBOT CỰC VIP
+ĐỊNH VỊ ESP
+NHẢY DÙ NHANH 1 GIÂY
+GIAO HÀNG NHANH CHÓNG
+HỖ TRỢ CÀI ĐẶT
+11 Quốc gia</div>
+                    <div class="card-footer">
+                        <div class="card-price">150.000đ</div>
+                        <a href="https://zalo.me/84993130042" target="_blank" class="card-btn">MUA NGAY</a>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-name">KEY 1 NGÀY TROLLMOD PHANTOM</div>
+                    <div class="card-desc">HỖ TRỢ CHO CẢ ANDROID VÀ IOS
+CÀI ĐẶT DỄ DÀNG, DỄ SỬ DỤNG
+AIMLOCK, AIMBOT CỰC VIP
+ĐỊNH VỊ ESP
+NHẢY DÙ NHANH 1 GIÂY
+GIAO HÀNG NHANH CHÓNG
+HỖ TRỢ CÀI ĐẶT
+11 Quốc gia</div>
+                    <div class="card-footer">
+                        <div class="card-price">55.000đ</div>
+                        <a href="https://zalo.me/84993130042" target="_blank" class="card-btn">MUA NGAY</a>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ===== 1. PROXY IPA ===== -->
+        <section class="category">
+            <h2 class="category-title">
+                <span class="icon"><img src="https://cdn.upanhlaylink.com/i/kTzGLbOk.png" alt="Proxy IPA"></span> PROXY IPA
+            </h2>
+            <div class="grid">
+                <div class="card">
+                    <div class="card-name">PROXY IPA 30 NGÀY</div>
+                    <div class="card-desc">ĐẦY ĐỦ CÁC LOẠI AIM TRONG APP
+NHẤN 1 PHÁT LÀ CÓ AIM
+Hỗ Trợ Từ iOS 17 Đến 18.7.1 & 26.0 Đến 27.0 Beta 2
+100000% AI CŨNG CÀI ĐƯỢC
+HOÀN TIỀN GẤP ĐÔI NẾU KO TD
+ANTIBAN ALL MAP CẢ RANK
+ANTIBAN HƠN PROXY VPN</div>
+                    <div class="card-footer">
+                        <div class="card-price">190.000đ</div>
+                        <a href="https://zalo.me/84993130042" target="_blank" class="card-btn">MUA NGAY</a>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-name">PROXY IPA 7 NGÀY</div>
+                    <div class="card-desc">ĐẦY ĐỦ CÁC LOẠI AIM TRONG APP
+NHẤN 1 PHÁT LÀ CÓ AIM
+Hỗ Trợ Từ iOS 17 Đến 18.7.1 & 26.0 Đến 27.0 Beta 2
+100000% AI CŨNG CÀI ĐƯỢC
+HOÀN TIỀN GẤP ĐÔI NẾU KO TD
+ANTIBAN ALL MAP CẢ RANK
+ANTIBAN HƠN PROXY</div>
+                    <div class="card-footer">
+                        <div class="card-price">90.000đ</div>
+                        <a href="https://zalo.me/84993130042" target="_blank" class="card-btn">MUA NGAY</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== 2. PROXY AIM IOS ===== -->
+        <section class="category">
+            <h2 class="category-title">
+                <span class="icon"><img src="https://cdn.upanhlaylink.com/i/iZuLbalY.jpeg" alt="Proxy VIP"></span> PROXY AIM IOS
+            </h2>
+            <div class="grid">
+                <div class="card">
+                    <div class="card-name">PROXY VIP + DÙNG 3 LOẠI AIM CÙNG 1 KEY (VĨNH VIỄN)</div>
+                    <div class="card-desc">1 KEY DÙNG ĐƯỢC NHIỀU LOẠI AIM
+AIM CỔ, BODY, DRAG, ANTENA, VV
+BẢN NÀY CÀI ĐƯỢC ALL IOS
+CÀI QUA WIFFI, 4G CŨNG ĐƯỢC
+100000% AI CŨNG CÀI ĐƯỢC
+HOÀN TIỀN GẤP ĐÔI NẾU KO TD
+ANTIBAN ALL MAP CẢ RANK</div>
+                    <div class="card-footer">
+                        <div class="card-price">900.000đ</div>
+                        <a href="https://zalo.me/84993130042" target="_blank" class="card-btn">MUA NGAY</a>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-name">PROXY VIP + DÙNG 3 LOẠI AIM CÙNG 1 KEY (THÁNG)</div>
+                    <div class="card-desc">1 KEY DÙNG ĐƯỢC NHIỀU LOẠI AIM
+AIM CỔ, BODY, DRAG, ANTENA, VV
+BẢN NÀY CÀI ĐƯỢC ALL IOS
+CÀI QUA WIFFI, 4G CŨNG ĐƯỢC
+100000% AI CŨNG CÀI ĐƯỢC
+HOÀN TIỀN GẤP ĐÔI NẾU KO TD
+ANTIBAN ALL MAP CẢ RANK</div>
+                    <div class="card-footer">
+                        <div class="card-price">200.000đ</div>
+                        <a href="https://zalo.me/84993130042" target="_blank" class="card-btn">MUA NGAY</a>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-name">PROXY VIP + DÙNG 3 LOẠI AIM CÙNG 1 KEY (TUẦN)</div>
+                    <div class="card-desc">1 KEY DÙNG ĐƯỢC NHIỀU LOẠI AIM
+AIM CỔ, BODY, DRAG, ANTENA, VV
+BẢN NÀY CÀI ĐƯỢC ALL IOS
+CÀI QUA WIFFI, 4G CŨNG ĐƯỢC
+100000% AI CŨNG CÀI ĐƯỢC
+HOÀN TIỀN GẤP ĐÔI NẾU KO TD
+ANTIBAN ALL MAP CẢ RANK</div>
+                    <div class="card-footer">
+                        <div class="card-price">100.000đ</div>
+                        <a href="https://zalo.me/84993130042" target="_blank" class="card-btn">MUA NGAY</a>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-name">PROXY VIP + DÙNG 3 LOẠI AIM CÙNG 1 KEY (NGÀY)</div>
+                    <div class="card-desc">1 KEY DÙNG ĐƯỢC NHIỀU LOẠI AIM
+AIM CỔ, BODY, DRAG, ANTENA, VV
+BẢN NÀY CÀI ĐƯỢC ALL IOS
+CÀI QUA WIFFI, 4G CŨNG ĐƯỢC
+100000% AI CŨNG CÀI ĐƯỢC
+HOÀN TIỀN GẤP ĐÔI NẾU KO TD
+ANTIBAN ALL MAP CẢ RANK</div>
+                    <div class="card-footer">
+                        <div class="card-price">30.000đ</div>
+                        <a href="https://zalo.me/84993130042" target="_blank" class="card-btn">MUA NGAY</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== 3. PROXY AIM ANDROID ===== -->
+        <section class="category">
+            <h2 class="category-title">
+                <span class="icon"><img src="https://cdn.upanhlaylink.com/i/iZuLbalY.jpeg" alt="Proxy Android"></span> PROXY AIM ANDROID
+            </h2>
+            <div class="grid">
+                <div class="card">
+                    <div class="card-name">PROXY AIM ANDROID 1 THÁNG</div>
+                    <div class="card-desc">PROXY VIP VN
+CÓ NHIỀU CHỨC NĂNG
+AIM CỔ, BODY, v.v
+SPEED, BACKJUMP NHƯ NGÀY XƯA
+ANTIBAND ALL MAP
+100% AI CŨNG CÀI ĐƯỢC
+HOÀN TIỀN GẤP ĐÔI NẾU KO TÁC DỤNG</div>
+                    <div class="card-footer">
+                        <div class="card-price">250.000đ</div>
+                        <a href="https://zalo.me/84993130042" target="_blank" class="card-btn">MUA NGAY</a>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-name">PROXY AIM ADR 1 TUẦN</div>
+                    <div class="card-desc">PROXY MEWT VIP
+CÓ NHIỀU CHỨC NĂNG
+AIM CỔ, BODY, v.v
+SPEED, BACKJUMP NHƯ NGÀY XƯA
+ANTIBAND ALL MAP
+100% AI CŨNG CÀI ĐƯỢC
+HOÀN TIỀN GẤP ĐÔI NẾU KO TÁC DỤNG</div>
+                    <div class="card-footer">
+                        <div class="card-price">150.000đ</div>
+                        <a href="https://zalo.me/84993130042" target="_blank" class="card-btn">MUA NGAY</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== 4. MENU MIGUL IOS ===== -->
+        <section class="category">
+            <h2 class="category-title">
+                <span class="icon"><img src="https://cdn.upanhlaylink.com/i/zKfaWiML.png" alt="Migul"></span> MENU MIGUL IOS
+            </h2>
+            <div class="grid">
+                <div class="card">
+                    <div class="card-name">MENU MIGUL PRO 1 THÁNG</div>
+                    <div class="card-desc">ESP LINE, BOX, HEALTH,...
+AIMBOT FOV, AIM SLIENT
+ĐẠN THẲNG, ẨN MÀN
+KEY PRO SẼ CÓ CHỨC NĂNG VIP
+CÀI ĐƯỢC CHO TẤT CẢ IOS
+ANTIBAN ALL MAP</div>
+                    <div class="card-footer">
+                        <div class="card-price">450.000đ</div>
+                        <a href="https://zalo.me/84993130042" target="_blank" class="card-btn">MUA NGAY</a>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-name">MENU MIGUL PRO 1 TUẦN</div>
+                    <div class="card-desc">ESP LINE, BOX, HEALTH,...
+AIMBOT FOV, AIM SLIENT
+ĐẠN THẲNG, ẨN MÀN
+KEY PRO SẼ CÓ CHỨC NĂNG VIP
+CÀI ĐƯỢC CHO TẤT CẢ IOS
+ANTIBAN ALL MAP</div>
+                    <div class="card-footer">
+                        <div class="card-price">250.000đ</div>
+                        <a href="https://zalo.me/84993130042" target="_blank" class="card-btn">MUA NGAY</a>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-name">MENU MIGUL LITE 1 THÁNG</div>
+                    <div class="card-desc">ESP LINE, BOX, HEALTH,...
+AIMBOT FOV, AIM SLIENT
+ĐẠN THẲNG, ẨN MÀN
+KEY PRO SẼ CÓ CHỨC NĂNG VIP
+CÀI ĐƯỢC CHO TẤT CẢ IOS
+ANTIBAN ALL MAP</div>
+                    <div class="card-footer">
+                        <div class="card-price">400.000đ</div>
+                        <a href="https://zalo.me/84993130042" target="_blank" class="card-btn">MUA NGAY</a>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-name">MENU MIGUL LITE 1 TUẦN</div>
+                    <div class="card-desc">ESP LINE, BOX, HEALTH,...
+AIMBOT FOV, AIM SLIENT
+ĐẠN THẲNG, ẨN MÀN
+KEY PRO SẼ CÓ CHỨC NĂNG VIP
+CÀI ĐƯỢC CHO TẤT CẢ IOS
+ANTIBAN ALL MAP</div>
+                    <div class="card-footer">
+                        <div class="card-price">200.000đ</div>
+                        <a href="https://zalo.me/84993130042" target="_blank" class="card-btn">MUA NGAY</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== 5. FILE ANDROID ===== -->
+        <section class="category">
+            <h2 class="category-title">
+                <span class="icon"><img src="https://cdn.upanhlaylink.com/i/VcLe4PCC.jpeg" alt="File ADR"></span> FILE ANDROID
+            </h2>
+            <div class="grid">
+                <div class="card">
+                    <div class="card-name">MODULE BUFF NHẠY ADR</div>
+                    <div class="card-desc">BUFF NHẠY REAL 100%
+HOÀN TIỀN 100% NẾU CÀI KHÔNG TÁC DỤNG
+TƯƠNG TÍCH CHO MỌI DÒNG MÁY
+ANTIBAND 100% CÂN RANK CẢ PHÒNG</div>
+                    <div class="card-footer">
+                        <div class="card-price">500.000đ</div>
+                        <a href="https://zalo.me/84993130042" target="_blank" class="card-btn">MUA NGAY</a>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-name">AIMLOCK ĐI RANK</div>
+                    <div class="card-desc">HỖ TRỢ ANDROID THẤP TỚI CAO
+AN TOÀN TUYỆT ĐỐI KO BAND ID
+100% TÁC DỤNG TƯƠNG THÍCH MỌI DÒNG MÁY ADR
+CÀI SIÊU DỄ VÀ SỬ DỤNG VĨNH VIỄN</div>
+                    <div class="card-footer">
+                        <div class="card-price">999.000đ</div>
+                        <a href="https://zalo.me/84993130042" target="_blank" class="card-btn">MUA NGAY</a>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-name">AIMLOCK EXTRACLY</div>
+                    <div class="card-desc">Aimlock Nhích Nhẹ Là Full Đỏ
+Không Kéo Tâm Là Dame Vàng
+Cân Kèo Tiền Kaiser, Gấu
+Đặc Biệt An Toàn Cho Acc Chính
+Cài Đặt Dễ, Sử Dụng Vĩnh Viễn</div>
+                    <div class="card-footer">
+                        <div class="card-price">350.000đ</div>
+                        <a href="https://zalo.me/84993130042" target="_blank" class="card-btn">MUA NGAY</a>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-name">NHẸ TÂM</div>
+                    <div class="card-desc">HỖ TRỢ GIẢM LỰC CẢN
+NHẸ TÂM REAL, ĐẶC BIỆT AN TOÀN
+ĐI RANK ĐI PHÒNG ĐỀU ĐƯỢC</div>
+                    <div class="card-footer">
+                        <div class="card-price">100.000đ</div>
+                        <a href="https://zalo.me/84993130042" target="_blank" class="card-btn">MUA NGAY</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== 6. FILE IOS ===== -->
+        <section class="category">
+            <h2 class="category-title">
+                <span class="icon"><img src="https://cdn.upanhlaylink.com/i/Cw11E6l5.png" alt="File iOS"></span> FILE IOS
+            </h2>
+            <div class="grid">
+                <div class="card">
+                    <div class="card-name">AIMLOCK ĐI RANK IOS</div>
+                    <div class="card-desc">NHÍCH NHẸ LÀ FULL MÁU ĐỎ KO KÉO LÀ VÀNG
+AN TOÀN TUYỆT ĐỐI
+TÁC DỤNG 100% CHO ALL IOS
+KÉO RANK BẮN PHÒNG ĐỀU AN TOÀN TUYỆT ĐỐI
+FILE PREMIUM VIP</div>
+                    <div class="card-footer">
+                        <div class="card-price">999.000đ</div>
+                        <a href="https://zalo.me/84993130042" target="_blank" class="card-btn">MUA NGAY</a>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-name">NHẸ TÂM IOS</div>
+                    <div class="card-desc">TÂM CỰC NHẸ GIẢM LỰC CẢN
+CÂN CHECK TỐT BAO AN TOÀN
+ĐI RANK THOẢI MÁI
+TỐI ƯU TOÀN BỘ IOS</div>
+                    <div class="card-footer">
+                        <div class="card-price">90.000đ</div>
+                        <a href="https://zalo.me/84993130042" target="_blank" class="card-btn">MUA NGAY</a>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-name">AIMLOCK VER 1</div>
+                    <div class="card-desc">KÉO NHẸ LÀ ĐỎ KO KÉO LÀ VÀNG
+HỖ TRỢ TỪ IOS 16 -> 27
+CÀI DỄ ĐI PHÒNG BAO ĂN KÈO
+ANTIBAND CÂN ACC CHÍNH</div>
+                    <div class="card-footer">
+                        <div class="card-price">250.000đ</div>
+                        <a href="https://zalo.me/84993130042" target="_blank" class="card-btn">MUA NGAY</a>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-name">AIMLOCK HEAD</div>
+                    <div class="card-desc">HỖ TRỢ NHẸ TÂM BÁM ĐẦU TỐT
+BÁM CHẶT Ở VÙNG ĐẦU
+KÉO NHẸ LÀ ĐỎ
+CÀI SIÊU DỄ HỖ TRỢ ALL THIẾT BỊ
+ANTIBAND 100%</div>
+                    <div class="card-footer">
+                        <div class="card-price">200.000đ</div>
+                        <a href="https://zalo.me/84993130042" target="_blank" class="card-btn">MUA NGAY</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== 7. CHỨNG CHỈ ESIGN IOS ===== -->
+        <section class="category">
+            <h2 class="category-title">
+                <span class="icon"><img src="https://cdn.upanhlaylink.com/i/gIzOmTwp.jpeg" alt="ESign"></span> CHỨNG CHỈ ESIGN IOS
+            </h2>
+            <div class="grid">
+                <div class="card">
+                    <div class="card-name">CHỨNG CHỈ 1 NĂM</div>
+                    <div class="card-desc">HỖ TRỢ MỌI PHIÊN BẢN IOS
+CHỨNG CHỈ CÓ HẠN SỬ DỤNG 12 THÁNG
+BẢO HÀNH 300 NGÀY
+CHỨNG CHỈ SỬ DỤNG DUY NHẤT 1 MÁY
+BAO GỒM FILE CHỨNG CHỈ VÀ LINK CÀI APP ĐẦY ĐỦ
+GÓI NÀY HỖ TRỢ THIẾT BỊ ẨN ICL VÀ BYPASS
+HỖ TRỢ UNBAN XÓA BLACKLIST
+HỖ TRỢ JIT YÊU CẦU MAC/PC</div>
+                    <div class="card-footer">
+                        <div class="card-price">250.000đ</div>
+                        <a href="https://zalo.me/84993130042" target="_blank" class="card-btn">MUA NGAY</a>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-name">CHỨNG CHỈ ESIGN 1 NĂM</div>
+                    <div class="card-desc">HỖ TRỢ IPHONE IPAD
+HỖ TRỢ MỌI PHIÊN BẢN IOS
+CHỨNG CHỈ CÓ THỜI HẠN SỬ DỤNG 12 THÁNG
+BẢO HÀNH 40 NGÀY
+SỬ DỤNG DUY NHẤT 1 THIẾT BỊ
+BAO GỒM LINK TẢI VÀ FILE CHỨNG CHỈ ĐẦY ĐỦ
+HỖ TRỢ ẨN ICL BYPASS
+HỖ TRỢ Unban XÓA BLACKLIST
+HỖ TRỢ JIT YÊU CẦU MAC/PC</div>
+                    <div class="card-footer">
+                        <div class="card-price">150.000đ</div>
+                        <a href="https://zalo.me/84993130042" target="_blank" class="card-btn">MUA NGAY</a>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-name">CHỨNG CHỈ 1 NĂM</div>
+                    <div class="card-desc">HỖ TRỢ IPHONE IPAD
+CHỈ HỖ TRỢ IOS 16.0 TRỞ LÊN
+CHỨNG CHỈ CÓ THỜI HẠN 12 THÁNG
+KHÔNG BẢO HÀNH
+CHỨNG CHỈ SỬ DỤNG DUY NHẤT CHO 1 THIẾT BỊ
+BAO GỒM FILE CHỨNG CHỈ VÀ LINK CÀI APP ĐẦY ĐỦ
+HỖ TRỢ BYPASS
+HỖ TRỢ UNBAN XÓA BỎ BLACKLIST
+KHÔNG HỖ TRỢ JT
+NHÂN BẢN ỨNG DỤNG KHÔNG GIỚI HẠN</div>
+                    <div class="card-footer">
+                        <div class="card-price">88.000đ</div>
+                        <a href="https://zalo.me/84993130042" target="_blank" class="card-btn">MUA NGAY</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== 8. FILE HỖ TRỢ KÉO TÂM OB55 ===== -->
+        <section class="category">
+            <h2 class="category-title">
+                <span class="icon"><img src="https://cdn.upanhlaylink.com/i/BwLI02J8.jpeg" alt="OB55"></span> FILE HỖ TRỢ KÉO TÂM OB55
+            </h2>
+            <div class="grid">
+                <div class="card">
+                    <div class="card-name">𝐓𝐫𝐢𝐜𝐤𝐋𝐨𝐜𝐤𝐀𝐮𝐫𝐚⏳</div>
+                    <div class="card-desc">🎯 𝐁𝐀́𝐌 Đ𝐀̂̀𝐔
+🔧 𝐅𝐈𝐗 𝐑𝐔𝐍𝐆
+🎯 𝐅𝐈𝐗 𝐋𝐎̂́
+🎯 𝐁𝐀́𝐌 𝐓𝐀̂𝐌
+⚡ 𝐍𝐇𝐀̣𝐘 𝐓𝐀̂𝐌
+📱 𝐍𝐇𝐀̣𝐘 𝐌𝐀̀𝐍
+🚀 𝐓𝐎̂́𝐈 𝐔̛𝐔 𝐌𝐀́𝐘</div>
+                    <div class="card-footer">
+                        <div class="card-price">20.000đ</div>
+                        <a href="https://zalo.me/84993130042" target="_blank" class="card-btn">MUA NGAY</a>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-name">𝐓𝐫𝐢𝐜𝐤𝐋𝐨𝐜𝐤𝐀𝐮𝐫𝐚⏳ 𝐕𝟏</div>
+                    <div class="card-desc">🎯 𝐁𝐀́𝐌 Đ𝐀̂̀𝐔
+🔧 𝐅𝐈𝐗 𝐑𝐔𝐍𝐆
+🎯 𝐅𝐈𝐗 𝐋𝐎̂́
+🎯 𝐁𝐀́𝐌 𝐓𝐀̂𝐌
+⚡ 𝐍𝐇𝐀̣𝐘 𝐓𝐀̂𝐌
+📱 𝐍𝐇𝐀̣𝐘 𝐌𝐀̀𝐍
+🚀 𝐓𝐎̂́𝐈 𝐔̛𝐔 𝐌𝐀́𝐘</div>
+                    <div class="card-footer">
+                        <div class="card-price">50.000đ</div>
+                        <a href="https://zalo.me/84993130042" target="_blank" class="card-btn">MUA NGAY</a>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-name">𝐓𝐫𝐢𝐜𝐤𝐋𝐨𝐜𝐤𝐀𝐮𝐫𝐚⏳ 𝐕𝟐</div>
+                    <div class="card-desc">🎯 𝐁𝐀́𝐌 Đ𝐀̂̀𝐔
+🔧 𝐅𝐈𝐗 𝐑𝐔𝐍𝐆
+🎯 𝐅𝐈𝐗 𝐋𝐎̂́
+🎯 𝐁𝐀́𝐌 𝐓𝐀̂𝐌
+⚡ 𝐍𝐇𝐀̣𝐘 𝐓𝐀̂𝐌
+📱 𝐍𝐇𝐀̣𝐘 𝐌𝐀̀𝐍
+🚀 𝐓𝐎̂́𝐈 𝐔̛𝐔 𝐌𝐀́𝐘</div>
+                    <div class="card-footer">
+                        <div class="card-price">100.000đ</div>
+                        <a href="https://zalo.me/84993130042" target="_blank" class="card-btn">MUA NGAY</a>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-name">𝐓𝐫𝐢𝐜𝐤𝐋𝐨𝐜𝐤𝐀𝐮𝐫𝐚⏳ 𝐕𝟑</div>
+                    <div class="card-desc">🎯 𝐁𝐀́𝐌 Đ𝐀̂̀𝐔
+🔧 𝐅𝐈𝐗 𝐑𝐔𝐍𝐆
+🎯 𝐅𝐈𝐗 𝐋𝐎̂́
+🎯 𝐁𝐀́𝐌 𝐓𝐀̂𝐌
+⚡ 𝐍𝐇𝐀̣𝐘 𝐓𝐀̂𝐌
+📱 𝐍𝐇𝐀̣𝐘 𝐌𝐀̀𝐍
+🚀 𝐓𝐎̂́𝐈 𝐔̛𝐔 𝐌𝐀́𝐘</div>
+                    <div class="card-footer">
+                        <div class="card-price">200.000đ</div>
+                        <a href="https://zalo.me/84993130042" target="_blank" class="card-btn">MUA NGAY</a>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-name">𝐓𝐫𝐢𝐜𝐤𝐋𝐨𝐜𝐤𝐀𝐮𝐫𝐚⏳ 𝐕𝟒</div>
+                    <div class="card-desc">🎯 𝐁𝐀́𝐌 Đ𝐀̂̀𝐔
+🔧 𝐅𝐈𝐗 𝐑𝐔𝐍𝐆
+🎯 𝐅𝐈𝐗 𝐋𝐎̂́
+🎯 𝐁𝐀́𝐌 𝐓𝐀̂𝐌
+⚡ 𝐍𝐇𝐀̣𝐘 𝐓𝐀̂𝐌
+📱 𝐍𝐇𝐀̣𝐘 𝐌𝐀̀𝐍
+🚀 𝐓𝐎̂́𝐈 𝐔̛𝐔 𝐌𝐀́𝐘</div>
+                    <div class="card-footer">
+                        <div class="card-price">300.000đ</div>
+                        <a href="https://zalo.me/84993130042" target="_blank" class="card-btn">MUA NGAY</a>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-name">𝐓𝐫𝐢𝐜𝐤𝐋𝐨𝐜𝐤𝐀𝐮𝐫𝐚⏳ 𝐕𝟓</div>
+                    <div class="card-desc">🎯 𝐁𝐀́𝐌 Đ𝐀̂̀𝐔
+🔧 𝐅𝐈𝐗 𝐑𝐔𝐍𝐆
+🎯 𝐅𝐈𝐗 𝐋𝐎̂́
+🎯 𝐁𝐀́𝐌 𝐓𝐀̂𝐌
+⚡ 𝐍𝐇𝐀̣𝐘 𝐓𝐀̂𝐌
+📱 𝐍𝐇𝐀̣𝐘 𝐌𝐀̀𝐍
+🚀 𝐓𝐎̂́𝐈 𝐔̛𝐔 𝐌𝐀́𝐘</div>
+                    <div class="card-footer">
+                        <div class="card-price">400.000đ</div>
+                        <a href="https://zalo.me/84993130042" target="_blank" class="card-btn">MUA NGAY</a>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-name">𝐓𝐫𝐢𝐜𝐤𝐋𝐨𝐜𝐤𝐀𝐮𝐫𝐚⏳ 𝐕𝟔</div>
+                    <div class="card-desc">🎯 𝐁𝐀́𝐌 Đ𝐀̂̀𝐔
+🔧 𝐅𝐈𝐗 𝐑𝐔𝐍𝐆
+🎯 𝐅𝐈𝐗 𝐋𝐎̂́
+🎯 𝐁𝐀́𝐌 𝐓𝐀̂𝐌
+⚡ 𝐍𝐇𝐀̣𝐘 𝐓𝐀̂𝐌
+📱 𝐍𝐇𝐀̣𝐘 𝐌𝐀̀𝐍
+🚀 𝐓𝐎̂́𝐈 𝐔̛𝐔 𝐌𝐀́𝐘</div>
+                    <div class="card-footer">
+                        <div class="card-price">500.000đ</div>
+                        <a href="https://zalo.me/84993130042" target="_blank" class="card-btn">MUA NGAY</a>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-name">𝐓𝐫𝐢𝐜𝐤𝐋𝐨𝐜𝐤𝐀𝐮𝐫𝐚⏳ 𝐕𝟕</div>
+                    <div class="card-desc">🎯 𝐁𝐀́𝐌 Đ𝐀̂̀𝐔
+🔧 𝐅𝐈𝐗 𝐑𝐔𝐍𝐆
+🎯 𝐅𝐈𝐗 𝐋𝐎̂́
+🎯 𝐁𝐀́𝐌 𝐓𝐀̂𝐌
+⚡ 𝐍𝐇𝐀̣𝐘 𝐓𝐀̂𝐌
+📱 𝐍𝐇𝐀̣𝐘 𝐌𝐀̀𝐍
+🚀 𝐓𝐎̂́𝐈 𝐔̛𝐔 𝐌𝐀́𝐘</div>
+                    <div class="card-footer">
+                        <div class="card-price">600.000đ</div>
+                        <a href="https://zalo.me/84993130042" target="_blank" class="card-btn">MUA NGAY</a>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-name">𝐓𝐫𝐢𝐜𝐤𝐋𝐨𝐜𝐤𝐀𝐮𝐫𝐚⏳ 𝐕𝟖</div>
+                    <div class="card-desc">🎯 𝐁𝐀́𝐌 Đ𝐀̂̀𝐔
+🔧 𝐅𝐈𝐗 𝐑𝐔𝐍𝐆
+🎯 𝐅𝐈𝐗 𝐋𝐎̂́
+🎯 𝐁𝐀́𝐌 𝐓𝐀̂𝐌
+⚡ 𝐍𝐇𝐀̣𝐘 𝐓𝐀̂𝐌
+📱 𝐍𝐇𝐀̣𝐘 𝐌𝐀̀𝐍
+🚀 𝐓𝐎̂́𝐈 𝐔̛𝐔 𝐌𝐀́𝐘</div>
+                    <div class="card-footer">
+                        <div class="card-price">700.000đ</div>
+                        <a href="https://zalo.me/84993130042" target="_blank" class="card-btn">MUA NGAY</a>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-name">𝐓𝐫𝐢𝐜𝐤𝐋𝐨𝐜𝐤𝐀𝐮𝐫𝐚⏳ 𝐕𝟗</div>
+                    <div class="card-desc">🎯 𝐁𝐀́𝐌 Đ𝐀̂̀𝐔
+🔧 𝐅𝐈𝐗 𝐑𝐔𝐍𝐆
+🎯 𝐅𝐈𝐗 𝐋𝐎̂́
+🎯 𝐁𝐀́𝐌 𝐓𝐀̂𝐌
+⚡ 𝐍𝐇𝐀̣𝐘 𝐓𝐀̂𝐌
+📱 𝐍𝐇𝐀̣𝐘 𝐌𝐀̀𝐍
+🚀 𝐓𝐎̂́𝐈 𝐔̛𝐔 𝐌𝐀́𝐘</div>
+                    <div class="card-footer">
+                        <div class="card-price">800.000đ</div>
+                        <a href="https://zalo.me/84993130042" target="_blank" class="card-btn">MUA NGAY</a>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-name">𝐓𝐫𝐢𝐜𝐤𝐋𝐨𝐜𝐤𝐀𝐮𝐫𝐚⏳ 𝐕𝟏𝟎</div>
+                    <div class="card-desc">🎯 𝐁𝐀́𝐌 Đ𝐀̂̀𝐔
+🔧 𝐅𝐈𝐗 𝐑𝐔𝐍𝐆
+🎯 𝐅𝐈𝐗 𝐋𝐎̂́
+🎯 𝐁𝐀́𝐌 𝐓𝐀̂𝐌
+⚡ 𝐍𝐇𝐀̣𝐘 𝐓𝐀̂𝐌
+📱 𝐍𝐇𝐀̣𝐘 𝐌𝐀̀𝐍
+🚀 𝐓𝐎̂́𝐈 𝐔̛𝐔 𝐌𝐀́𝐘</div>
+                    <div class="card-footer">
+                        <div class="card-price">900.000đ</div>
+                        <a href="https://zalo.me/84993130042" target="_blank" class="card-btn">MUA NGAY</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <footer class="footer">
+        <h3>⚔️ SHOP NYN ⚔️</h3>
+        <p>Liên Hệ Ngay Với Admin Khi Bạn Gặp Phải Vấn Đề Gì Nhé</p>
+        <p>📞 Contact Me: <a href="https://zalo.me/84993130042" target="_blank">0993130042</a> (Zalo)</p>
+        <p>💬 Box Zalo: <a href="https://zalo.me/g/0u0qcy9oqwodok1o6nui" target="_blank">https://zalo.me/g/0u0qcy9oqwodok1o6nui</a></p>
+        <p>📘 Facebook: <a href="https://www.facebook.com/share/1dXDJyYvar/?mibextid=wwXIfr" target="_blank">NYN</a></p>
+        <div class="copy">© 2025 Shop NYN. All rights reserved.</div>
+    </footer>
+
+    <script>
+        function closeNotice() {
+            document.getElementById("noticeOverlay").style.display = "none";
+        }
+        document.addEventListener("keydown", e => {
+            if (e.key === "Escape") closeNotice();
+        });
+
+        // ===== AUTH =====
+        function openAuth(type) {
+            document.getElementById("authOverlay").style.display = "flex";
+            if (type === "login") showLogin();
+            else showRegister();
+        }
+        function showLogin() {
+            document.getElementById("loginBox").style.display = "block";
+            document.getElementById("registerBox").style.display = "none";
+        }
+        function showRegister() {
+            document.getElementById("loginBox").style.display = "none";
+            document.getElementById("registerBox").style.display = "block";
+        }
+        function closeAuth() {
+            document.getElementById("authOverlay").style.display = "none";
+        }
+
+        function handleRegister() {
+            const user = document.getElementById("regUser").value.trim();
+            const pass = document.getElementById("regPass").value;
+            const pass2 = document.getElementById("regPass2").value;
+            const err = document.getElementById("regError");
+
+            if (!user || !pass) {
+                err.style.display = "block";
+                err.innerText = "Vui lòng nhập đầy đủ thông tin!";
+                return;
+            }
+            if (pass !== pass2) {
+                err.style.display = "block";
+                err.innerText = "Mật khẩu nhập lại không khớp!";
+                return;
+            }
+            let users = JSON.parse(localStorage.getItem("shop_users") || "{}");
+            if (users[user]) {
+                err.style.display = "block";
+                err.innerText = "Tài khoản đã tồn tại!";
+                return;
+            }
+            users[user] = pass;
+            localStorage.setItem("shop_users", JSON.stringify(users));
+            localStorage.setItem("shop_current", user);
+            updateAuthUI();
+            closeAuth();
+            alert("Đăng ký thành công!");
+        }
+
+        function handleLogin() {
+            const user = document.getElementById("loginUser").value.trim();
+            const pass = document.getElementById("loginPass").value;
+            const err = document.getElementById("loginError");
+            let users = JSON.parse(localStorage.getItem("shop_users") || "{}");
+
+            if (users[user] && users[user] === pass) {
+                localStorage.setItem("shop_current", user);
+                updateAuthUI();
+                closeAuth();
+            } else {
+                err.style.display = "block";
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem("shop_current");
+            updateAuthUI();
+        }
+
+        function updateAuthUI() {
+            const current = localStorage.getItem("shop_current");
+            if (current) {
+                document.getElementById("authBtns").style.display = "none";
+                document.getElementById("userInfo").style.display = "flex";
+                document.getElementById("currentUser").innerText = current;
+            } else {
+                document.getElementById("authBtns").style.display = "flex";
+                document.getElementById("userInfo").style.display = "none";
+            }
+        }
+
+        // Click outside to close auth
+        document.getElementById("authOverlay").addEventListener("click", function(e) {
+            if (e.target === this) closeAuth();
+        });
+
+        updateAuthUI();
+    </script>
+</body>
+</html>
